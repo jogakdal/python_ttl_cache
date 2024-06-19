@@ -1,7 +1,7 @@
 import unittest
 import time
 
-from ttl_cache.ttl_cache import TtlCache
+from parametric_ttl_cache.ttl_cache import TtlCache
 
 
 class TestTtlCache(unittest.TestCase):

@@ -2,7 +2,7 @@ from collections import OrderedDict
 
 from expiringdict import ExpiringDict
 
-from ttl_cache.utility import Utility
+from parametric_ttl_cache.utility import Utility
 
 
 class TtlCache:
