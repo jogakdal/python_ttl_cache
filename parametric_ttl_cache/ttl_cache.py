@@ -1,14 +1,13 @@
+import inspect
 from collections import OrderedDict
 
 from expiringdict import ExpiringDict
-
-from parametric_ttl_cache.utility import Utility
 
 
 class TtlCache:
     """
     TTL Cache
-        TTL(Time To Live)이 지원되는 함수 단위 메모리 캐시
+        함수 단위로 TTL(Time To Live)이 지원되는 메모리 캐시
         함수 인자에 전달되는 데이터 별로 캐싱이 가능하며, 캐싱 키는 함수 이름과 인자의 이름, 인자로 전달된 값으로 구성됨
         캐시에 저장된 데이터는 ttl(초단위) 이 지나면 자동으로 expire되어 삭제됨
         캐시에 저장된 데이터는 max_size를 넘어가면 LRU(Least Recently Used) 정책에 따라 삭제됨
@@ -49,12 +48,12 @@ class TtlCache:
 
     def __call__(self, function):
         def make_key(_function, *args, **kwargs):
-            params = Utility.map_arg_to_value(_function, *args, **kwargs)
+            params = self.map_arg_to_value(_function, *args, **kwargs)
 
             if self.__applying_params is not None:
                 params = OrderedDict((k, v) for k, v in params.items() if k in self.__applying_params)
 
-            return f'{_function.__qualname__}({Utility.dict_to_string(params)})'
+            return f'{_function.__qualname__}({self.dict_to_string(params)})'
 
         def wrapped_function(*args, **kwargs):
             key = make_key(function, *args, **kwargs)
@@ -75,10 +74,28 @@ class TtlCache:
 
     # 특정 키가 캐시에 존재하는지 확인
     def is_exist(self, key):
-        return self.get_item(key) is not None
+        for item in self.__cache:
+            if key in item:
+                return True
+        return False
 
     def get_item(self, key):
         for item in self.__cache:
             if key in item:
                 return item
         return None
+
+    @staticmethod
+    def dict_to_string(dictionary, separator=','):
+        return separator.join([f'{k}={v}' for k, v in dictionary.items()])
+
+    @staticmethod
+    def map_arg_to_value(function, *args, **kwargs):
+        signature = inspect.signature(function)
+        params = OrderedDict([(p.name, p.default) for p in signature.parameters.values()])
+
+        for arg_value, param in zip(args, params):
+            params[param] = arg_value
+
+        params.update(kwargs)
+        return params
