@@ -5,14 +5,14 @@ with open("README.md", "r") as fh:
 
 setup(
     name='parametric-ttl-cache',
-    version='1.0',
+    version='1.0.2',
     author='Yongho Hwang',
     author_email='jogakdal@gmail.com',
     description='A function-level memory cache that supports Time To Live (TTL)',
     long_description=long_description,
     long_description_content_type="text/markdown",
     url='https://github.com/jogakdal/python_ttl_cache',
-    install_requires=['collections', 'inspect', 'expiringdict'],
+    install_requires=['expiringdict'],
     packages=find_packages(exclude=[]),
     keywords=['cache', 'memory cache', 'ttl cache', 'function cache', 'cache decorator', 'parametric cache', 'jogakdal'],
     python_requires='>=3.6',

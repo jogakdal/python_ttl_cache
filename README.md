@@ -21,7 +21,7 @@ A function-level memory cache that supports Time To Live (TTL).
   - *Note*: The key can include partial elements of the cache key.
 
 ## Usage:
-1. Install the package using `pip install python-ttl-cache`.
+1. Install the package using `pip install parametric-ttl-cache`.
 2. Import the `TtlCache` class `from parametric_ttl_cache.ttl_cache import TtlCache`.
 2. Add the `@TtlCache(ttl=seconds)` decorator to the function you want to cache.
 3. Cache keys are generated in the format `"{class_name.}method_name(param1=value1, param2=value2, ...)"`.
